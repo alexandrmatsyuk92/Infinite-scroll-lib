@@ -34,7 +34,7 @@
                 return `${dateObj.getMonth() + 1}/${dateObj.getDate() + 1}/${dateObj.getFullYear() + 1}`;
             }
 
-            const infiniteScroll = new InfiniteScroll('scrollContainer', postsData, 1000, items => {
+            const infiniteScroll = new InfiniteScroll('scrollContainer', postsData, 10, items => {
                 let htmlToRender = '';
                 items.map(item => {
                     const comment = truncateComment(item.comment);

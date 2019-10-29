@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>   
+        <link type="text/css" rel="stylesheet" href="./index.css" /></link>
+        <script type="text/javascript" src="./data.js"></script>
+        <script type="text/javascript" src="./infinite-scroll.js"></script>
+    </head>
+    <body>
+        <div class="app-name">
+            <h1>Infinite Scroll App</h1>
+        </div>
+        <div class="main-container">
+            <div id="scrollContainer"></div>
+        </div>
+    </body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const template = '<div class="blog-card"> <div class="blog-card-header"> <div class="flex-container"> <div class="blog-user-avatar"> <img src="{{blog-avatar-url}}" class="blog-user-avatar-image"> </div><div class="blog-user-info"> <div class="blog-user-name">{{blog-user-name}}</div><div class="blog-post-date">{{blog-post-date}}</div></div></div></div><div class="blog-card-content"> <div class="blog-card-subject">{{blog-subject}}</div><div class="blog-card-comment">{{blog-comment}}</div></div></div>';
+
+            postsData.sort((obj1, obj2) => {
+                return new Date(obj2.date) - new Date(obj1.date);
+            });
+
+            function truncateComment(comment) {
+                if (comment > 30) {
+                    return comment.substring(0,29) + '...';
+                }
+                return comment;
+            }
+
+            function convertDate(dateString) {
+                const dateObj = new Date(dateString);
+                return `${dateObj.getMonth() + 1}/${dateObj.getDate() + 1}/${dateObj.getFullYear() + 1}`;
+            }
+
+            const infiniteScroll = new InfiniteScroll('scrollContainer', postsData, 1000, items => {
+                let htmlToRender = '';
+                items.map(item => {
+                    const comment = truncateComment(item.comment);
+                    const date = convertDate(item.date);
+                    let itemHtml = template;
+
+                    itemHtml = itemHtml.replace('{{blog-avatar-url}}', item.user_image);
+                    itemHtml = itemHtml.replace('{{blog-user-name}}', item.user_first_name);
+                    itemHtml = itemHtml.replace('{{blog-post-date}}', date);
+                    itemHtml = itemHtml.replace('{{blog-subject}}', item.subject);
+                    itemHtml = itemHtml.replace('{{blog-comment}}', comment);
+                    htmlToRender += itemHtml;
+                });
+                
+                return htmlToRender;
+            });
+        });
+    </script>
+</html> 

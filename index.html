@@ -23,7 +23,7 @@
             });
 
             function truncateComment(comment) {
-                if (comment > 30) {
+                if (comment.length > 30) {
                     return comment.substring(0,29) + '...';
                 }
                 return comment;
